@@ -1,5 +1,5 @@
 {
-    "name": "ktcs3-eis-simulator",
+    "name": "NBIS-EVCIF-simulator",
     "version": "1.0.0",
     "description": "eis simulator",
     "main": "app.js",
@@ -84,8 +84,8 @@
         "win-deploy64": "electron-builder --windows nsis:x64"
     },
     "build": {
-        "productName": "KTCS-3 EIS-Simulator",
-        "appId": "eis-simulator.nbis.co.kr",
+        "productName": "NBIS EVC Interface Simulator",
+        "appId": "evc-if-simulator.nbis.co.kr",
         "asar": true,
         "mac": {
             "target": [
@@ -93,7 +93,7 @@
             ]
         },
         "dmg": {
-            "title": "KTCS-3 EIS-Simulator"
+            "title": "NBIS EVC Interface Simulator"
         },
         "win": {
             "target": [
