@@ -57,6 +57,7 @@
             href="css/core/horizontal-menu.css"
         />
         <!-- END: Theme CSS-->
+        <link rel="stylesheet" type="text/css" href="css/select2.min.css" />
 
         <!-- BEGIN: Custom CSS-->
         <link rel="stylesheet" type="text/css" href="css/core/style.css" />
@@ -83,15 +84,6 @@
                         class="col-lg-3 bg-black no-card-shadow full-height-vh- pl-1 pr-1 list-background-image"
                         style="height: 726px"
                     >
-                        <button
-                            type="button"
-                            id="id_eis_add_btn"
-                            class="btn btn-floating btn-floating-bottom btn-circle btn-md btn-danger"
-                            data-toggle="modal"
-                            data-target="#p_modal_add"
-                        >
-                            <i class="fas fa-magic-wand-sparkles"></i>
-                        </button>
                         <div class="text-right white mt-1 mb-1">
                             <input
                                 type="checkbox"
@@ -105,391 +97,155 @@
                             >
                         </div>
                         <div class="h2 text-center white mt-2 mb-3">
-                            <b>KTCS-3 EIS Simulator</b>
+                            <b>NBIS EVC Interface</b>
+                        </div>
+
+                        <div class="card bg-transparent widget-notification">
+                            <div class="row">
+                                <div class="col-6 h4 white mt-2 mb-1">
+                                    <b>장치 연결하기 :</b>
+                                </div>
+                                <div
+                                    class="col-6 white mt-2 mb-1 d-flex align-items-end flex-column"
+                                >
+                                    <buttin id="refresh_comport_button">
+                                        <i
+                                            class="fa fa-refresh white font-medium-3 align-middle cursor-pointer"
+                                            >&nbsp;새로고침</i
+                                        >
+                                    </buttin>
+                                </div>
+                            </div>
+                            <div>
+                                <select
+                                    id="select_com_port"
+                                    class="selectpicker"
+                                    data-width="100%"
+                                    name="comport"
+                                    data-style="btn-selectbox"
+                                ></select>
+                            </div>
+                        </div>
+                        <div class="row d-flex align-items-end flex-column">
+                            <div class="col-6">
+                                <buttin
+                                    id="connect_comport_button"
+                                    type="button"
+                                    class="btn btn-dark btn-lg btn-block"
+                                >
+                                    &nbsp;연결하기
+                                </buttin>
+                            </div>
                         </div>
                         <div class="card bg-transparent widget-notification">
-                            <div class="card-content">
-                                <div class="card-body p-0 pb-1">
-                                    <div
-                                        class="text-center white"
-                                        id="device_list"
-                                    >
-                                        장치가 없습니다.
-                                    </div>
-                                </div>
+                            <div class="h4 white mt-2 mb-1">
+                                <b>명령어 :</b>
+                            </div>
+                            <select
+                                id="select_command"
+                                class="selectpicker"
+                                data-width="100%"
+                                name="command"
+                                data-style="btn-selectbox"
+                                disabled
+                            ></select>
+                        </div>
+                        <div class="row d-flex align-items-end flex-column">
+                            <div class="col-6">
+                                <buttin
+                                    id="send_command_button"
+                                    type="button"
+                                    class="btn btn-dark btn-lg btn-block"
+                                    disabled
+                                >
+                                    &nbsp;전송하기
+                                </buttin>
                             </div>
                         </div>
                     </div>
                     <!-- END: 왼쪽 장비 리스트 -->
 
                     <!-- BEGIN: 오른쪽 장비 컨트롤 -->
-                    <div
-                        class="col-lg-9"
-                        style="
-                            background-image: url(./images/background.png);
-                            border: 0px;
-                        "
-                    >
+                    <div class="col-lg-9">
                         <div
-                            class="row no-gutters no-card-shadow"
-                            id="div_eis_info"
-                        ></div>
+                            class="row d-flex align-items-end flex-column"
+                            style="padding: 5px 30px"
+                        >
+                            <div class="col-3">
+                                <buttin
+                                    id="clear_log_button"
+                                    type="button"
+                                    class="btn btn-warning btn-md btn-block"
+                                >
+                                    &nbsp;Clear
+                                </buttin>
+                            </div>
+                        </div>
                         <div
-                            class="row no-gutters no-card-shadow"
-                            id="div_rbc_info"
-                        ></div>
+                            id="log_view_div"
+                            class="tableFixHead"
+                            style="
+                                background-image: url(./images/background.png);
+                                border: 0px;
+                                padding: 5px 10px;
+                            "
+                        >
+                            <table
+                                id="log_view_table"
+                                width="100%"
+                                border="1"
+                                cellspacing="0"
+                                cellpadding=""
+                            >
+                                <thead>
+                                    <tr>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="8%"
+                                        >
+                                            Sender
+                                        </th>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="15%"
+                                        >
+                                            Command
+                                        </th>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="5%"
+                                        >
+                                            Cmd.Type
+                                        </th>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="12%"
+                                        >
+                                            Seq.
+                                        </th>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="8%"
+                                        >
+                                            Length
+                                        </th>
+                                        <th
+                                            class="btn-dark td-center"
+                                            width="52%"
+                                        >
+                                            Data
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <!-- END: 오른쪽 장비 컨트롤 -->
                 </div>
             </div>
         </div>
         <!-- END: Content-->
-
-        <!-- BEGIN: 장비 추가 Modal -->
-        <div
-            class="modal fade text-left"
-            id="p_modal_add"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="p_modal_add"
-            aria-hidden="true"
-            data-backdrop="static"
-            data-keyboard="false"
-        >
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">연동장치 추가</h5>
-                        <button
-                            type="button"
-                            class="close"
-                            aria-label="Close"
-                            id="btn_close_x"
-                        >
-                            <i class="bx bx-x"></i>
-                        </button>
-                    </div>
-                    <form
-                        onkeydown="return event.key != 'Enter';"
-                        class="form"
-                        role="form"
-                        id="p_add_form"
-                    >
-                        <div class="form-body">
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6
-                                            class="text-center text-bold-600 mb-1"
-                                        >
-                                            연동장치 정보 설정
-                                        </h6>
-                                        <div class="row">
-                                            <label class="col-md-3">이름</label>
-                                            <div class="col-lg-9 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_name"
-                                                    placeholder="연동장치-00"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3 text-primary"
-                                                >* 장치 1계</label
-                                            >
-                                            <div
-                                                class="col-lg-9 form-group text-right"
-                                            >
-                                                <div
-                                                    class="radio radio-primary"
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        id="device_1_main"
-                                                        name="main_device"
-                                                        checked
-                                                    />
-                                                    <label for="device_1_main"
-                                                        >주 장치 사용</label
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 1계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_1_network_1_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_1_network_1_port"
-                                                    placeholder="00000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 2계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_1_network_2_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_1_network_2_port"
-                                                    placeholder="00000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3 text-primary"
-                                                >* 장치 2계</label
-                                            >
-                                            <div
-                                                class="col-lg-9 form-group text-right"
-                                            >
-                                                <div
-                                                    class="radio radio-primary"
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        id="device_2_main"
-                                                        name="main_device"
-                                                    />
-                                                    <label for="device_2_main"
-                                                        >주 장치 사용</label
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 1계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_2_network_1_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_2_network_1_port"
-                                                    placeholder="00000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 2계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_2_network_2_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="device_2_network_2_port"
-                                                    placeholder="00000"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6
-                                            class="text-center text-bold-600 mb-1"
-                                        >
-                                            연동 RBC 정보 설정
-                                        </h6>
-                                        <div class="row">
-                                            <label class="col-md-3">이름</label>
-                                            <div class="col-lg-9 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_name"
-                                                    placeholder="RBC-00"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3 text-info"
-                                                >* 장치 1계</label
-                                            >
-                                            <div
-                                                class="col-lg-9 form-group text-right"
-                                            >
-                                                <div class="radio radio-info">
-                                                    <input
-                                                        type="radio"
-                                                        id="rbc_1_main"
-                                                        name="main_rbc"
-                                                        checked
-                                                    />
-                                                    <label for="rbc_1_main"
-                                                        >주 장치 사용</label
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 1계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_1_network_1_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_1_network_1_port"
-                                                    placeholder="0000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 2계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_1_network_2_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_1_network_2_port"
-                                                    placeholder="0000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3 text-info"
-                                                >* 장치 2계</label
-                                            >
-                                            <div
-                                                class="col-lg-9 form-group text-right"
-                                            >
-                                                <div class="radio radio-info">
-                                                    <input
-                                                        type="radio"
-                                                        id="rbc_2_main"
-                                                        name="main_rbc"
-                                                    />
-                                                    <label for="rbc_2_main"
-                                                        >주 장치 사용</label
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 1계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_2_network_1_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_2_network_1_port"
-                                                    placeholder="0000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <label class="col-md-3"
-                                                >네트워크 2계</label
-                                            >
-                                            <div class="col-lg-6 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_2_network_2_ip"
-                                                    placeholder="192.168.00.000"
-                                                />
-                                            </div>
-                                            <div class="col-lg-3 form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="rbc_2_network_2_port"
-                                                    placeholder="0000"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-light-secondary"
-                                    id="btn_modal_cancel"
-                                >
-                                    <i class="bx bx-x align-middle"></i>
-                                    <span class="ml-25">닫기</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-primary ml-1"
-                                    id="btn_modal_submit"
-                                >
-                                    <i class="bx bx-check align-middle"></i>
-                                    <span class="ml-25">저장</span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- END: 장비 추가 Modal -->
 
         <!-- BEGIN: Page Vendor JS-->
         <script src="js/core/jquery.min.js"></script>
@@ -500,12 +256,13 @@
 
         <!-- BEGIN: Page JS-->
         <!-- <script src="js/core/jquery.serialize-object.min.js"></script> -->
-        <script src="js/core/libcommon.js"></script>
+        <script src="js/scripts/select2.min.js"></script>
         <!-- <script src="js/core/common.js"></script> -->
-        <script src="renderer/index.js"></script>
         <script src="renderer/progress_bar.js"></script>
         <script src="renderer/ipc.js"></script>
         <script src="renderer/utils.js"></script>
+        <script src="renderer/logview.js"></script>
+        <script src="renderer/index.js"></script>
         <!-- END: Page JS-->
     </body>
     <!-- END: Body-->

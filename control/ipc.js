@@ -7,7 +7,6 @@
 const { ipcMain } = require("electron");
 const logger = require("../utils/logger");
 const eventEmitter = require("./event-emitter");
-const model = require("../model");
 const TAG = "[IPC-MAIN]";
 
 // ipcMain에서의 이벤트 수신
@@ -21,35 +20,15 @@ ipcMain.on("eis-config", async (evt, recvPayload) => {
 
     switch (recvPayload.cmd) {
         case "GET": {
-            res = await model.getRegisteredSystems();
-            if (res.success) {
-                payload.data = res.data;
-            } else {
-                payload.resCode = 500;
-            }
             break;
         }
         case "DELETE": {
-            res = await model.deleteRegisteredSystem(recvPayload.system);
             break;
         }
         case "POST": {
             break;
         }
         case "PUT": {
-            if (recvPayload.type === "EIS-DEFAULT") {
-                // 진행중인 시뮬레이션 중지 필요
-                res = await model.changeDefaultDevice(
-                    recvPayload.sys_id,
-                    recvPayload.id
-                );
-
-                res.data = {
-                    type: recvPayload.type,
-                    sys_id: recvPayload.sys_id,
-                    id: recvPayload.id,
-                };
-            }
             break;
         }
         default: {
@@ -67,11 +46,6 @@ ipcMain.on("eis-config", async (evt, recvPayload) => {
     evt.reply("eis-config", payload);
 });
 
-ipcMain.on("eis-simulator", (evt, payload) => {
-    logger.info(TAG, "eis-simulator received =", payload);
-    eventEmitter.emit("eis-simulator", payload);
-});
-
 ipcMain.on("devtool-control", (evt, payload) => {
     logger.info(TAG, "devtool-control received =", payload);
     eventEmitter.emit("devtool-control", payload);
@@ -82,7 +56,9 @@ module.exports.sendToRenderer = function sendToRenderer(channel, payload) {
     if (!mainWindow) {
         return;
     }
-    mainWindow.webContents.send(channel, payload);
+    try {
+        mainWindow.webContents.send(channel, payload);
+    } catch (e) {}
 };
 
 module.exports.setMainWindow = function setMainWindow(win) {

@@ -6,23 +6,15 @@ const logPath = path.join(app.getPath("userData"), "logs");
 if (!fs.existsSync(logPath)) {
     fs.mkdirSync(logPath, { recursive: true });
 }
-const dbDir = path.join(app.getPath("userData"), "data");
-console.log(dbDir)
-if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-}
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 process.env["LOG_PATH"] = logPath;
-process.env["DB_PATH"] = dbDir;
 process.env["IS_PACKAGED"] = app.isPackaged;
 
 const logger = require("./utils/logger");
-require("./model");
 const ipc = require("./control/ipc.js");
 // for devtool control
 const eventEmitter = require("./control/event-emitter");
-require("./simulator");
 
 const TAG = "[APP]";
 logger.info(TAG, "\n\n\n\n\n\nAPP Started. isPackaged =", app.isPackaged);
@@ -32,8 +24,8 @@ var mainWindow = null;
 
 const createWindow = () => {
     mainWindow = new BrowserWindow({
-        title: "KTCS-3 EIS Simulator",
-        width: 1360,
+        title: "NBIS EVC Interface Simulator",
+        width: 1380,
         height: 755,
         webPreferences: {
             nodeIntegration: true,
@@ -58,6 +50,7 @@ const createWindow = () => {
         }
         if (process.platform !== "darwin") {
             app.quit();
+            app.exit();
         }
     });
 
@@ -135,9 +128,10 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
     if (devTools) {
-        demvTools.close();
+        devTools.close();
     }
     if (process.platform !== "darwin") {
         app.quit();
+        app.exit();
     }
 });
