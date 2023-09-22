@@ -205,7 +205,6 @@ const scrollToTop = (id) => {
 // Require jQuery
 const scrollSmoothlyToBottom = (id) => {
     const element = $(`#${id}`);
-    console.log("xxxxx ele =", element);
     element.animate(
         {
             scrollTop: element.prop("scrollHeight"),

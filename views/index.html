@@ -168,18 +168,23 @@
                     <!-- BEGIN: 오른쪽 장비 컨트롤 -->
                     <div class="col-lg-9">
                         <div
-                            class="row d-flex align-items-end flex-column"
-                            style="padding: 5px 30px"
+                            class="row d-flex align-items-end justify-content-end"
+                            style="padding: 5px 0px; margin-right: 30px"
                         >
-                            <div class="col-3">
-                                <buttin
-                                    id="clear_log_button"
-                                    type="button"
-                                    class="btn btn-warning btn-md btn-block"
-                                >
-                                    &nbsp;Clear
-                                </buttin>
-                            </div>
+                            <buttin
+                                id="clear_log_button"
+                                type="button"
+                                class="btn btn-dark btn-md"
+                            >
+                                &nbsp;Clear </buttin
+                            >&nbsp;&nbsp;
+                            <buttin
+                                id="toggle_autoscroll_button"
+                                type="button"
+                                class="btn btn-danger btn-md"
+                            >
+                                &nbsp;Stop Auto Scroll
+                            </buttin>
                         </div>
                         <div
                             id="log_view_div"

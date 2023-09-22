@@ -10,16 +10,42 @@ jQuery(document).ready(async function () {
 
     showProcessingPage("통신장치 목록을 불러오는 중입니다.");
     var ports = await getAvalableSerialPorts();
-    console.log(ports);
     // show
     createComportSelectbox(ports);
     setTimeout(() => {
         stopProcessingPage();
     }, 500);
     createCommandSelectbox();
-    setInterval(() => {
-        scrollSmoothlyToBottom("log_view_div");
-    }, 500);
+    logViewAutoScroll(true);
+});
+
+var mAutoScrolInstance = null;
+const logViewAutoScroll = (isAuto) => {
+    if (isAuto) {
+        mAutoScrolInstance = setInterval(() => {
+            scrollSmoothlyToBottom("log_view_div");
+        }, 500);
+    } else {
+        if (isNullObject(mAutoScrolInstance)) {
+            return;
+        }
+        clearInterval(mAutoScrolInstance);
+        mAutoScrolInstance = null;
+    }
+};
+
+$("#toggle_autoscroll_button").on("click", () => {
+    if (!isNullObject(mAutoScrolInstance)) {
+        logViewAutoScroll(false);
+        $("#toggle_autoscroll_button").removeClass("btn-danger");
+        $("#toggle_autoscroll_button").addClass("btn-primary");
+        $("#toggle_autoscroll_button").text("Auto Scroll");
+    } else {
+        logViewAutoScroll(true);
+        $("#toggle_autoscroll_button").removeClass("btn-primary");
+        $("#toggle_autoscroll_button").addClass("btn-danger");
+        $("#toggle_autoscroll_button").text("Stop Auto Scroll");
+    }
 });
 
 $("#send_command_button").on("click", () => {
